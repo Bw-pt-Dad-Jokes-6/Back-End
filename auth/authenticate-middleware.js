@@ -1,12 +1,20 @@
-/* 
-  complete the middleware code to check if the user is logged in
-  before granting access to the next middleware/route handler
-*/
+const jwt = require('jsonwebtoken');
+const config = require("../config")
+
 module.exports = (req, res, next) => {
-  if (req.session && req.session.user) {
-    next();
+  if(req.headers.token == null){
+    res.status(400)
+    res.send({error: 'no token provided'})
   }
-  else {
-    res.status(400).json({ message: "please login first" })
+  else{
+    jwt.verify(req.headers.token,config.secret, (err, decoded) => {
+      if(decoded != null){
+        next();
+      }
+      else{
+        res.status(400)
+        res.send({error: 'token not valid'})
+      }
+    })
   }
 };
