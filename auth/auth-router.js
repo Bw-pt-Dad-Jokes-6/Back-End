@@ -13,16 +13,29 @@ router.post('/register', (req, res) => {
     username: username,
     password: password
   }
+
+  authdb.getUserByUsername(username)
+    .then((user) => {
+      if(user[0] != null){
+        res.send({ error: 'username already taken' })
+        res.status(409)
+        return;
+      }
+    })
+    .catch(err => {
+      console.log(err)
+    })
+
   authdb.register(user)
-  .then((user) => {
-    res.send({Message: 'user created'})
-    res.status(200)
-  })
-  .catch((err) => {
-    console.log(err);
-    res.send({error: 'internal server error' + err})
-    res.status(500)
-  })
+    .then((user) => {
+      res.send(user.id)
+      res.status(200)
+    })
+    .catch((err) => {
+      console.log(err);
+      res.send({ error: 'internal server err' })
+      res.status(500)
+    })
 });
 
 router.post('/login', (req, res) => {
@@ -31,23 +44,23 @@ router.post('/login', (req, res) => {
   let password = req.headers.password;
 
   authdb.getUserByUsername(username)
-  .then(user => {
+    .then(user => {
       console.log(user)
-      if(user[0] && bcrypt.compareSync(password, user[0].password)) {
+      if (user[0] && bcrypt.compareSync(password, user[0].password)) {
         req.session.user = user[0];
         res.status(200)
-        res.send({message:`Welcome ${user[0].username}`})
+        res.send({ message: `Welcome ${user[0].username}` })
       }
       else {
         res.status(401)
-        res.send({message: 'invalid credentials'})
+        res.send({ message: 'invalid credentials' })
       }
-  })
-  .catch(err => {
+    })
+    .catch(err => {
       console.log(err)
       res.status(500)
-      res.send({error: 'internal server error'})
-  })
+      res.send({ error: 'internal server error' })
+    })
 
 });
 
