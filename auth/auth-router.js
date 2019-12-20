@@ -6,7 +6,7 @@ const config = require("../config")
 
 
 router.post('/register', (req, res) => {
-
+  console.log(req.body);
   let username = req.body.username;
   let password = req.body.password;
 
@@ -42,7 +42,7 @@ router.post('/register', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-
+  console.log(req.body);
   let username = req.bod.username;
   let password = req.body.password;
 
