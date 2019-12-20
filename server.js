@@ -1,5 +1,5 @@
 const express = require('express');
-
+const cors = require('cors');
 const session = require('express-session');
 
 const sessionConfig = {
@@ -22,8 +22,9 @@ const tokenMiddleware = require('./auth/authenticate-middleware')
 const server = express();
 server.use(session(sessionConfig));
 server.use(express.json());
+server.use(cors);
 
 server.use('/api/auth', authRouter);
-server.use('/api/jokes',tokenMiddleware, jokesRouter)
+server.use('/api/jokes',tokenMiddleware, jokesRouter);
 
 module.exports = server;
