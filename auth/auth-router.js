@@ -43,7 +43,7 @@ router.post('/register', (req, res) => {
 
 router.post('/login', (req, res) => {
   console.log(req.body);
-  let username = req.bod.username;
+  let username = req.body.username;
   let password = req.body.password;
 
   authdb.getUserByUsername(username)
