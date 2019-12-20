@@ -6,8 +6,6 @@ const config = require("../config")
 
 
 router.post('/register', (req, res) => {
-
-  console.log(req.headers);
   console.log(req.params);
 
   let username = req.headers.username;
@@ -45,7 +43,6 @@ router.post('/register', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-    console.log(req.headers);
     console.log(req.params);
 
   let username = req.headers.username;
@@ -53,7 +50,6 @@ router.post('/login', (req, res) => {
 
   authdb.getUserByUsername(username)
     .then(user => {
-      console.log(user)
       if (user[0] && bcrypt.compareSync(password, user[0].password)) {
         const token =  generateToken(user[0]);
         res.status(200).json({ message: `Welcome ${user[0].username}` , token})
