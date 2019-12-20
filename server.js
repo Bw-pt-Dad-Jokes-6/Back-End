@@ -1,6 +1,16 @@
-const express = require('express');
-const cors = require('cors');
+const express = require('express');;
 const session = require('express-session');
+
+var whitelist = ['https://webpt9-dadjokes6-develop.netlify.com/', 'https://webpt9-dadjokes6.netlify.com/', 'http://localhost.com:3000/']
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
 
 const sessionConfig = {
   name: 'session',
@@ -22,7 +32,6 @@ const tokenMiddleware = require('./auth/authenticate-middleware')
 const server = express();
 server.use(session(sessionConfig));
 server.use(express.json());
-server.use(cors);
 
 server.use('/api/auth', authRouter);
 server.use('/api/jokes',tokenMiddleware, jokesRouter);
