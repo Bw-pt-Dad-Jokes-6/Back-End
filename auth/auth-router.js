@@ -6,10 +6,9 @@ const config = require("../config")
 
 
 router.post('/register', (req, res) => {
-  console.log(req.body);
 
-  let username = req.headers.username;
-  let password = req.headers.password;
+  let username = req.body.username;
+  let password = req.body.password;
 
   password = bcrypt.hashSync(password, 12);
 
@@ -20,7 +19,7 @@ router.post('/register', (req, res) => {
 
   authdb.getUserByUsername(username)
     .then((user) => {
-      if(user[0] != null){
+      if (user[0] != null) {
         res.send({ error: 'username already taken' })
         res.status(409)
         return;
@@ -43,17 +42,15 @@ router.post('/register', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-  console.log(req.body);
 
-
-  let username = req.headers.username;
-  let password = req.headers.password;
+  let username = req.bod.username;
+  let password = req.body.password;
 
   authdb.getUserByUsername(username)
     .then(user => {
       if (user[0] && bcrypt.compareSync(password, user[0].password)) {
-        const token =  generateToken(user[0]);
-        res.status(200).json({ message: `Welcome ${user[0].username}` , token})
+        const token = generateToken(user[0]);
+        res.status(200).json({ message: `Welcome ${user[0].username}`, token })
       }
       else {
         res.status(401)
@@ -68,7 +65,7 @@ router.post('/login', (req, res) => {
 
 });
 
-function generateToken(user){
+function generateToken(user) {
   let payload = {
     subject: user.id,
     username: user.username
