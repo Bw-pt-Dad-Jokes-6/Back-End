@@ -1,8 +1,8 @@
 const router = require('express').Router();
 const authdb = require('./UserAccess')
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const config = require("../config")
+const jwt = require('jsonwebtoken');
 
 
 router.post('/register', (req, res) => {
@@ -66,6 +66,7 @@ router.post('/login', (req, res) => {
 });
 
 function generateToken(user) {
+
   let payload = {
     subject: user.id,
     username: user.username

@@ -7,8 +7,10 @@ module.exports = (req, res, next) => {
     res.send({error: 'no token provided'})
   }
   else{
-    jwt.verify(req.headers.token,config.secret, (err, decoded) => {
+    jwt.verify(req.headers.token, config.secret, (err, decoded) => {
+      console.log(decoded);
       if(decoded != null){
+        req.body.userInfo = decoded
         next();
       }
       else{
