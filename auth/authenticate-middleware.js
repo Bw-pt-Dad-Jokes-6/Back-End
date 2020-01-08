@@ -8,7 +8,6 @@ module.exports = (req, res, next) => {
   }
   else{
     jwt.verify(req.headers.token, config.secret, (err, decoded) => {
-      console.log(decoded);
       if(decoded != null){
         req.body.userInfo = decoded
         next();

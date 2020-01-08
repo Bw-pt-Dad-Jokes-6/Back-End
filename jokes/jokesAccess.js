@@ -8,7 +8,8 @@ module.exports = {
     getAllJokes,
     getJokesByRange,
     createJoke,
-    editJoke
+    editJoke,
+    remove
 }
 
 function getJokeById(jokeId){
@@ -38,4 +39,8 @@ function editJoke(joke, jokeId){
 
 function getJokesByRange(min,max){
     return db("jokes").whereBetween('id', [min,max]);
+}
+
+function remove(jokeId){
+    return db("jokes").del().where({ id: jokeId })
 }
