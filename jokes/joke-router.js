@@ -51,15 +51,14 @@ router.get('/byuser', tokenMiddleware, (req, res) => {
 })
 
 router.post('/create', tokenMiddleware, (req, res) => {
-  console.log(req.body);
-  if (req.body.joke_body == null) {
+  if (req.body.newjoke.joke_body == null) {
     res.send({ Error: 'Please provide a joke' });
     res.status(400);
   }
 
   let joke = {
-    joke_body: req.body.joke_body,
-    punchline: req.body.punchline,
+    joke_body: req.body.newjoke.joke_body,
+    punchline: req.body.newjoke.punchline,
     user: req.body.userInfo.subject
   }
 
