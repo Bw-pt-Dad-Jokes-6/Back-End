@@ -51,7 +51,7 @@ router.get('/byuser', tokenMiddleware, (req, res) => {
 })
 
 router.post('/create', tokenMiddleware, (req, res) => {
-
+  console.log(req.body);
   if (req.body.joke_body == null) {
     res.send({ Error: 'Please provide a joke' });
     res.status(400);
