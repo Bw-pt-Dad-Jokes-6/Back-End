@@ -81,7 +81,7 @@ router.put('/edit/:id', tokenMiddleware, (req, res) => {
     res.status(400);
   }
 
-  let joke = {
+  let newJoke = {
     joke_body: req.body.joke_body,
     punchline: req.body.punchline,
     user: req.body.userInfo.subject
@@ -91,7 +91,7 @@ router.put('/edit/:id', tokenMiddleware, (req, res) => {
     .first()
     .then((joke) => {
       if (joke.user == req.body.userInfo.subject) {
-        jokesdb.editJoke(joke, req.params.id)
+        jokesdb.editJoke(newJoke, req.params.id)
           .then((joke) => {
             res.send(joke);
             res.status(200);
