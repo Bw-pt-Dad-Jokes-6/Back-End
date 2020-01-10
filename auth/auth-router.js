@@ -6,38 +6,37 @@ const jwt = require('jsonwebtoken');
 
 
 router.post('/register', (req, res) => {
-  console.log(req.body);
   let username = req.body.username;
   let password = req.body.password;
 
   password = bcrypt.hashSync(password, 12);
 
-  user = {
+  let user = {
     username: username,
     password: password
   }
 
   authdb.getUserByUsername(username)
-    .then((user) => {
-      if (user[0] != null) {
-        res.send({ error: 'username already taken' })
-        res.status(409)
-        return;
+    .then((currentUser) => {
+      if (currentUser[0] != null) {
+        res.status(400)
+        res.send({ error: 'username already taken' })    
+      }
+      else{
+        authdb.register(user)
+        .then((newUser) => {
+          res.status(200)
+          res.send(newUser.id)
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(500)
+          res.send({ error: 'internal server err' })
+        })
       }
     })
     .catch(err => {
-      console.log(err)
-    })
 
-  authdb.register(user)
-    .then((user) => {
-      res.send(user.id)
-      res.status(200)
-    })
-    .catch((err) => {
-      console.log(err);
-      res.send({ error: 'internal server err' })
-      res.status(500)
     })
 });
 
